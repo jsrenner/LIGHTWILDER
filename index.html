@@ -46,7 +46,7 @@
             <sc-for list="{{ albTracks }}" as="t" hint-placeholder-count="2">
               <div style="display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:24px;align-items:center;padding:20px 0;border-bottom:1px solid rgba(239,228,210,.22)">
                 <div style="width:96px;height:96px;background:url({{ t.cover }}) center/cover;box-shadow:0 10px 24px rgba(0,0,0,.4)"></div>
-                <div style="display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:6px"><span style="font-family:'Instrument Serif',serif;font-size:34px;line-height:1">{{ t.title }}</span><span style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#a9a195">Single · {{ t.len }}</span><div style="display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:6px;font-size:10px;letter-spacing:.14em;text-transform:uppercase"><a href="#">Spotify</a><a href="#">Apple Music</a><a href="https://music.amazon.com/artists/B0HKLXDM2L/light-wilder" target="_blank" rel="noopener">Amazon</a><a href="#">YouTube</a><a href="https://lightwilder.bandcamp.com/album/dawn" target="_blank" rel="noopener">Bandcamp</a></div></div>
+                <div style="display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:6px"><span style="font-family:'Instrument Serif',serif;font-size:34px;line-height:1">{{ t.title }}</span><span style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#a9a195">Single · {{ t.len }}</span><div style="display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:6px;font-size:10px;letter-spacing:.14em;text-transform:uppercase"><a href="{{ t.spotify }}" target="_blank" rel="noopener">Spotify</a><a href="{{ t.apple }}" target="_blank" rel="noopener">Apple Music</a><a href="{{ t.amazon }}" target="_blank" rel="noopener">Amazon</a><a href="{{ t.youtube }}" target="_blank" rel="noopener">YouTube</a><a href="{{ t.bandcamp }}" target="_blank" rel="noopener">Bandcamp</a></div></div>
                 <span onClick="{{ t.play }}" style="width:38px;height:38px;flex-shrink:0;border-radius:9px;background:#f28a72;color:#10202a;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .2s ease,background .2s ease,box-shadow .2s ease" style-hover="transform:scale(1.08);background:#ff9d85;box-shadow:0 0 22px rgba(242,138,114,.55)" style-active="transform:scale(.96)"><sc-if value="{{ t.playing }}" hint-placeholder-val="{{ false }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="#10202a"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg></sc-if><sc-if value="{{ t.paused }}" hint-placeholder-val="{{ true }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="#10202a" style="margin-left:-1px"><path d="M7 4.5v15a1 1 0 001.5.86l12-7.5a1 1 0 000-1.72l-12-7.5A1 1 0 007 4.5z"></path></svg></sc-if></span>
               </div>
             </sc-for>
@@ -261,7 +261,7 @@ class Component extends DCLogic {
     spans.forEach((s, i) => { if (all[i] == null) return; const L = this.lyLine(i, all[i], this.lyP || 0, lyIn, vw); s.style.opacity = L.op; s.style.transform = 'translate3d(0,' + L.y + 'em,0)'; s.style.webkitTransform = s.style.transform; s.style.color = L.color; });
   }
   seekTo(e) { const el = this.filmRef.current; if (!el || !el.duration) return; const r = e.currentTarget.getBoundingClientRect(); const p = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)); el.currentTime = p * el.duration; this.setState({ filmPct: Math.round(p * 1000) / 10 }); }
-  tracks = [{ title: 'Dawn', dur: 243, cover: 'img/cover-art.jpg', src: 'audio/dawn.mp3' }, { title: 'Stone by Stone', dur: 277, cover: 'img/stone-cover.jpg', src: 'audio/stone-by-stone.mp3' }];
+  tracks = [{ title: 'Dawn', spotify: 'https://open.spotify.com/track/0S9Y7Cn34Ub4JSp76qIPE8', apple: 'https://music.apple.com/us/song/dawn/6814982201', amazon: 'https://music.amazon.com/albums/B0HKLLJDWM?trackAsin=B0HKLXM439', youtube: 'https://youtu.be/MKvjIkJ80YI', bandcamp: 'https://lightwilder.bandcamp.com/track/dawn', dur: 243, cover: 'img/cover-art.jpg', src: 'audio/dawn.mp3' }, { title: 'Stone by Stone', spotify: 'https://open.spotify.com/track/5Tnu3xMhiIr3Zy8zxt5ELk', apple: 'https://music.apple.com/us/song/stone-by-stone/6814982202', amazon: 'https://music.amazon.com/albums/B0HKLLJDWM?trackAsin=B0HKLXVT8Q', youtube: 'https://youtu.be/jjhRdADVc0A', bandcamp: 'https://lightwilder.bandcamp.com/track/stone-by-stone', dur: 277, cover: 'img/stone-cover.jpg', src: 'audio/stone-by-stone.mp3' }];
   filmRef = React.createRef();
   lyRef = React.createRef();
   lyricText = [
@@ -562,7 +562,7 @@ But on this solid rock I stand`
       shade: 0.25,
       albCover: T[at].cover, albTitle: T[at].title,
       albTracks: T.map((t, i) => ({ num: String(i + 1).padStart(2, '0'), title: t.title, len: mmss(t.dur), bg: i === at ? 'rgba(255,255,255,.14)' : 'transparent', numColor: i === at ? '#f28a72' : '#c9c1b2', select: () => this.switchAlb(i),
-        cover: t.cover,
+        cover: t.cover, spotify: t.spotify, apple: t.apple, amazon: t.amazon, youtube: t.youtube, bandcamp: t.bandcamp,
         roman: ['i.', 'ii.', 'iii.', 'iv.'][i],
         rowColor: i === at ? '#efe4d2' : 'rgba(239,228,210,.6)',
         fstyle: i === at ? 'italic' : 'normal',
