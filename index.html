@@ -559,7 +559,7 @@ But on this solid rock I stand`
       line1: hl[0], line2: hl[1],
       showLabels: this.props.showLabels ?? true,
       showFilmBar: this.props.showFilmBar ?? false,
-      shade: 0.25,
+      shade: 0.1,
       albCover: T[at].cover, albTitle: T[at].title,
       albTracks: T.map((t, i) => ({ num: String(i + 1).padStart(2, '0'), title: t.title, len: mmss(t.dur), bg: i === at ? 'rgba(255,255,255,.14)' : 'transparent', numColor: i === at ? '#f28a72' : '#c9c1b2', select: () => this.switchAlb(i),
         cover: t.cover, spotify: t.spotify, apple: t.apple, amazon: t.amazon, youtube: t.youtube, bandcamp: t.bandcamp,
